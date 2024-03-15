@@ -2,6 +2,7 @@ package com.feri.bookusers;
 
 import com.feri.bookusers.model.User;
 import com.feri.bookusers.repository.UserRepository;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,6 +18,13 @@ public class UserService extends com.feri.bookusers.UserServiceGrpc.UserServiceI
 
     @Override
     public void createUser(com.feri.bookusers.User.UserRequest request, StreamObserver<com.feri.bookusers.User.UserResponse> responseObserver) {
+        if (request.getAge() < 0) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription("Age cannot be negative")
+                    .asRuntimeException());
+            return;
+        }
+
         User user = new User(request.getName(), request.getSurname(), request.getAge(), request.getEmail(), request.getUsername());
         userRepository.createUser(user);
         com.feri.bookusers.User.UserResponse response = userToUserResponse(user);
