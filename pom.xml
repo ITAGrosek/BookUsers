@@ -119,6 +119,14 @@
     <!-- Profiles to handle OS-specific properties -->
     <profiles>
         <profile>
+            <id>native</id>
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+                <!-- Dodatne lastnosti za konfiguracijo native gradnje -->
+            </properties>
+        </profile>
+
+        <profile>
             <id>osx</id>
             <activation>
                 <os>

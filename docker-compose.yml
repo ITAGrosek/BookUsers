@@ -1,23 +1,17 @@
 version: '3.8'
 services:
-  users-service:
-    image: quarkus/users-jvm
+  app:
+    build: .
     ports:
-      - "8081:8080" # Zunanji port za HTTP promet (spremenjeno glede na vaše potrebe)
-      - "9090:9000" # Zunanji port za gRPC promet (dodano)
-    environment:
-      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongo-service:27017/usersdb
+      - "8080:8080"
     depends_on:
-      - mongo-service
-
-  mongo-service:
+      - mongodb
+  mongodb:
     image: mongo:latest
     ports:
-      - "27018:27017" # Preslikava porta za MongoDB, da se izogne konfliktu z drugimi instancami
-    environment:
-      - MONGO_INITDB_DATABASE=usersdb
+      - "27017:27017"
     volumes:
-      - mongo-volume:/data/db
+      - mongo-data:/data/db
 
 volumes:
-  mongo-volume:
+  mongo-data:
