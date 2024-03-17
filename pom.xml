@@ -15,7 +15,6 @@
         <quarkus.platform.version>2.7.2.Final</quarkus.platform.version>
         <grpc.version>1.40.1</grpc.version>
         <protobuf.version>3.17.3</protobuf.version>
-        <os.detected.classifier>${os.detected.classifier}</os.detected.classifier>
     </properties>
 
     <dependencyManagement>
@@ -52,25 +51,34 @@
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5-mockito</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>3.11.2</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Quarkus plugin -->
+            <plugin>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>detect</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -83,7 +91,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -93,7 +100,6 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-            <!-- Protobuf and gRPC plugin -->
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
@@ -122,18 +128,6 @@
             <id>native</id>
             <properties>
                 <quarkus.package.type>native</quarkus.package.type>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>osx</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <properties>
-                <os.detected.classifier>osx-x86_64</os.detected.classifier>
             </properties>
         </profile>
     </profiles>
