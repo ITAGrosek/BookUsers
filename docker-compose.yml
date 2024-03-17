@@ -1,17 +1,22 @@
 version: '3.8'
 services:
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongodb
   mongodb:
     image: mongo:latest
+    container_name: mongodb
     ports:
-      - "27017:27017"
+      - "27018:27017"  # Spremenjeno iz "27017:27017" na "27018:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongodb_data:/data/db
+
+  users-service:
+    image: quarkus/users-jvm
+    container_name: users-service
+    environment:
+      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017/usersdb
+    ports:
+      - "9002:9002"
+    depends_on:
+      - mongodb
 
 volumes:
-  mongo-data:
+  mongodb_data:

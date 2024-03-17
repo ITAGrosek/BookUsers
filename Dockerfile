@@ -1,17 +1,22 @@
-# Izberite osnovno sliko, ki ustreza različici Jave, ki jo potrebuje vaš projekt
-FROM adoptopenjdk/openjdk21:jre-21.0.21_9-alpine
+# Uporabite uradno OpenJDK sliko z željeno različico JDK
+FROM openjdk:21
 
-# Nastavite delovni imenik v kontejnerju
+# Opcijsko: Set the ENV JAVA_OPTS to adjust JVM options
+ENV JAVA_OPTS=""
+
+# Nastavite delovni imenik v kontejnerju za aplikacijo
 WORKDIR /app
 
-# Kopirajte izgrajene artefakte iz ciljnega direktorija v delovni direktorij kontejnerja
+# Kopirajte artefakte gradnje iz ciljnega direktorija vaše Quarkus aplikacije
+# Opomba: Za pravilno kopiranje se prepričajte, da je struktura vašega projekta standardna
+# in da uporabljate Maven za pakiranje aplikacije
 COPY target/quarkus-app/lib/ /app/lib/
 COPY target/quarkus-app/*.jar /app/
 COPY target/quarkus-app/app/ /app/app/
 COPY target/quarkus-app/quarkus/ /app/quarkus/
 
-# Nastavite točko vstopa za kontejner
-ENTRYPOINT ["java", "-jar", "/app/quarkus-run.jar"]
+# Izpostavite port, na katerem bo aplikacija dostopna
+EXPOSE 9001
 
-# Izpostavite port, ki ga vaša aplikacija uporablja
-EXPOSE 8080
+# Zagon aplikacije s pomočjo Java naredi, z opcijami, ki so potrebne za Quarkus
+CMD ["java", "-jar", "/app/quarkus-run.jar"]
