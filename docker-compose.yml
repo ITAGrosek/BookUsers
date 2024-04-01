@@ -4,9 +4,11 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27018:27017"  # Spremenjeno iz "27017:27017" na "27018:27017"
+      - "27018:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - backend-network
 
   users-service:
     image: quarkus/users-jvm
@@ -17,6 +19,12 @@ services:
       - "9002:9002"
     depends_on:
       - mongodb
+    networks:
+      - backend-network
 
 volumes:
   mongodb_data:
+
+networks:
+  backend-network:
+    external: true
