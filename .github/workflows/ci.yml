@@ -54,5 +54,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/naloga2itausers:latest
+          tags: martingrosek/naloga2itausers:latest
+
+
 
